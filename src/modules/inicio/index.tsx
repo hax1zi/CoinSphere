@@ -13,8 +13,8 @@ export function Inicio() {
           às novas gemas, o CoinSphere coloca você no centro da galáxia cripto.{" "}
         </p>
       </div>
-      <div className="relative">
-        <div className="animate-[spin_5s_linear_infinite]">
+      <div className="relative max-md:hidden">
+        <div className="animate-[spin_8s_linear_infinite]">
           <img className="principais criptos" src="/mainsCripto.png" />
         </div>
         <img
