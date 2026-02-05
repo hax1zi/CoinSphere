@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useMobileMenuActive } from "@/store/useMobileMenuActive";
-import { Bolt, Menu } from "lucide-react";
+import { Bolt, Menu, X } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 export default function MainLayout() {
@@ -64,7 +64,7 @@ export default function MainLayout() {
                     </div>
                 </div>
                 <div>
-                    <Button onClick={() => toggleActive()} variant="ghost" className="max-md:inline-flex hidden">
+                    <Button onClick={() => toggleActive()} variant="ghost" className={`max-md:inline-flex hidden ${isActive && "invisible"}`}>
                         <Menu />
                     </Button>
                 </div>
@@ -75,12 +75,15 @@ export default function MainLayout() {
     return (
         <div className="dark bg-background w-screen h-screen manrope ">
             <Header />
-            <main
-                className={`dark:text-white text-black h-[calc(100vh-80px)] px-[10vw]  ${isActive ? "overflow-hidden" : "overflow-auto"}`}
-            >
+            <main className={`dark:text-white text-black h-[calc(100vh-80px)] px-[10vw] overflow-auto`}>
                 <div
-                    className={`h-[${isActive ? "calc(100vh-70px)" : "0px"}]  w-full top-[70px] left-0 z-10 transition-transform duration-300 ${isActive ? "translate-y-0" : "-translate-y-200"}`}
+                    className={`${isActive ? "min-md:hidden" : "hidden"} absolute top-0 left-0 w-full h-full bg-background/95 z-30 flex items-center justify-center`}
                 >
+                    <div className="absolute top-5 right-13">
+                        <Button onClick={desactivate} variant="ghost">
+                            <X />
+                        </Button>
+                    </div>
                     <div className="pt-20 ">
                         <Navbar />
                         <div className="flex items-center flex-col justify-center gap-1 ">
@@ -96,6 +99,7 @@ export default function MainLayout() {
                         </div>
                     </div>
                 </div>
+
                 <Outlet />
             </main>
         </div>
