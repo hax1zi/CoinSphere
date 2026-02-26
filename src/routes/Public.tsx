@@ -1,13 +1,13 @@
-import { Criptomoedas } from "@/modules/criptomoedas";
-import { Inicio } from "../modules/inicio";
+import { Cryptocurrencies } from "@/views/Cryptocurrencies";
+import { Home } from "@/views/Home";
 
 export const publicRoutes = [
   {
     path: "/",
-    element: <Inicio />,
+    element: <Home />,
   },
   {
     path: "/criptomoedas",
-    element: <Criptomoedas />,
+    element: <Cryptocurrencies />,
   },
 ];

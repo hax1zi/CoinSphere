@@ -11,7 +11,7 @@ export default function MainLayout() {
     const Navbar = () => {
         return (
             <div className="relative">
-                <nav className="space-x-4 py-2 max-md:flex max-md:flex-col max-md:items-center max-md:space-x-0 max-md:space-y-2 items-center text-lg font-medium ">
+                <nav className="space-x-4 py-2 max-md:flex max-md:flex-col max-md:items-center max-md:space-x-0 max-md:space-y-2 items-center  font-medium ">
                     <Link
                         onClick={desactivate}
                         className={cn(
@@ -48,23 +48,29 @@ export default function MainLayout() {
     };
     const Header = () => {
         return (
-            <header className="px-[10vw] z-20 py-4 border-b-2 dark:text-white text-black flex justify-between items-center">
-                <div className="inline-flex items-center gap-2">
-                    <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
-                    <h1 className="font-bold text-2xl max-lg:hidden">CoinSphere</h1>
-                </div>
-                <div className="max-md:hidden flex gap-4">
-                    <Navbar />
-                    <div className="inline-flex items-center gap-1 ">
-                        <Button variant="ghost">
-                            <Bolt />
-                        </Button>
-                        <Button variant="ghost">Entrar</Button>
-                        <Button className="font-semibold">Abrir Minha Conta</Button>
+            <header className="px-[10vw] z-20 py-4 border-b-2 dark:text-white text-black max-md:flex justify-between">
+                <div className="flex justify-between items-center">
+                    <div className="inline-flex items-center gap-2">
+                        <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
+                        <h1 className="font-bold text-2xl max-lg:hidden">CoinSphere</h1>
+                    </div>
+                    <div className="max-md:hidden flex  gap-4">
+                        <Navbar />
+                        <div className="inline-flex items-center gap-1 ">
+                            <Button variant="ghost">
+                                <Bolt />
+                            </Button>
+                            <Button variant="ghost">Entrar</Button>
+                            <Button className="font-semibold">Abrir Minha Conta</Button>
+                        </div>
                     </div>
                 </div>
                 <div>
-                    <Button onClick={() => toggleActive()} variant="ghost" className={`max-md:inline-flex hidden ${isActive && "invisible"}`}>
+                    <Button
+                        onClick={() => toggleActive()}
+                        variant="ghost"
+                        className={` min-md:hidden min-md:invisible ${isActive && "invisible"}`}
+                    >
                         <Menu />
                     </Button>
                 </div>

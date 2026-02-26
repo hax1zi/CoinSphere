@@ -1,4 +1,4 @@
-export function Inicio() {
+export function Home() {
   return (
     <div className="flex items-center h-full justify-between overflow-hidden">
       <div>
