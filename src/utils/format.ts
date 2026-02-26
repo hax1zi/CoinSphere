@@ -1,16 +1,16 @@
-export function formatMoney(value: number, currency: string, compact: boolean): string {
+export function formatMoney(value: number, currency: string, compact: boolean, fractionDigits: number): string {
     return new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: currency,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: fractionDigits,
         notation: compact === true ? "compact" : "standard",
     }).format(value);
 }
 
 export function formatPercentage(value: number): string {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("pt-BR", {
         style: "percent",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-    }).format(value / 100);
+    }).format(Math.abs(value) / 100);
 }

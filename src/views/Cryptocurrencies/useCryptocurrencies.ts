@@ -9,6 +9,7 @@ const CACHE_EXPIRATION_MS = 5 * 60 * 1000; // 5 minutos
 export default function useCryptocurrencies() {
     const [cryptocoins, setCryptocoins] = useState<CryptocoinType[]>([]);
     const [globalMarketData, setGlobalMarketData] = useState<GlobalMarketDataType | null>(null);
+    const [compactRows, setCompactRows] = useState<"small" | "medium" | "big">("big");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cacheIsExist = (cached: string | null, setState: any): boolean => {
@@ -38,7 +39,7 @@ export default function useCryptocurrencies() {
         const cached = localStorage.getItem(CACHE_KEY_COINS_MARKET);
         if (cacheIsExist(cached, setCryptocoins)) return;
 
-        req.get("/coins/markets?vs_currency=usd")
+        req.get("/coins/markets?vs_currency=usd&price_change_percentage=1h")
             .then((res) => {
                 setCryptocoins(res.data);
                 localStorage.setItem(CACHE_KEY_COINS_MARKET, JSON.stringify({ data: res.data, timestamp: Date.now() }));
@@ -51,5 +52,8 @@ export default function useCryptocurrencies() {
         getCoins();
     }, []);
 
-    return { cryptocoins, globalMarketData };
+    const handleCompactRows = (padding: "small" | "medium" | "big") => {
+        setCompactRows(padding);
+    };
+    return { cryptocoins, globalMarketData, handleCompactRows, compactRows };
 }
