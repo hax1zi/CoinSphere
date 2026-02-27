@@ -10,7 +10,7 @@ const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutos
 export default function useCryptocurrencies() {
     const [cryptocoins, setCryptocoins] = useState<CryptocoinType[]>([]);
     const [globalMarketData, setGlobalMarketData] = useState<GlobalMarketDataType | null>(null);
-    const [compactRows, setCompactRows] = useState<"small" | "medium" | "big">(isMobile === false ? "small" : "big");
+    const [compactRows, setCompactRows] = useState<"small" | "medium" | "big">(isMobile === true ? "small" : "big");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cacheIsExist = (cached: string | null, setState: any): boolean => {
