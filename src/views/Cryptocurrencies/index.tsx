@@ -4,6 +4,7 @@ import useCryptocurrencies from "./useCryptocurrencies";
 import { formatMoney, formatPercentage } from "@/utils/format";
 import SourceCoinGecko from "@/components/SourceCoinGecko";
 import PorcentTable from "./components/PocentTable";
+import { isMobile } from "@/utils/mobile";
 
 export function Cryptocurrencies() {
     const { cryptocoins, globalMarketData, compactRows, handleCompactRows } = useCryptocurrencies();
@@ -14,9 +15,9 @@ export function Cryptocurrencies() {
         return (
             <section
                 aria-labelledby="crypto-market-overview-title"
-                className="mt-6 space-y-3 rounded-lg border border-[#383838] bg-background/40 p-4 backdrop-blur-sm"
+                className={`mt-6 space-y-3 rounded-lg border border-[#383838] bg-background/40 p-4 backdrop-blur-sm ${isMobile === true && "pb-10"}`}
             >
-                <SourceCoinGecko className="right-4" />
+                <SourceCoinGecko className={`${isMobile === false ? "right-4" : "bottom-0 right-6 pt-4"}`} />
                 <div className="flex items-center justify-between gap-4">
                     <div>
                         <h2 id="crypto-market-overview-title" className="text-xl font-bold">
@@ -76,7 +77,7 @@ export function Cryptocurrencies() {
                 aria-labelledby="crypto-table-title"
                 className="mt-10 w-full rounded-lg bg-[#383838]/20 relative p-4 sm:p-6"
             >
-                <SourceCoinGecko className="right-6" />
+                <SourceCoinGecko className={`${isMobile === false ? "right-6" : "bottom-0 right-6 pt-4"}`} />
 
                 <div className="flex flex-col  ">
                     <div>
@@ -106,15 +107,18 @@ export function Cryptocurrencies() {
                             >
                                 <Rows2 size={18} />
                             </button>
-                            <button
-                                onClick={() => handleCompactRows("medium")}
-                                className={`rounded-full p-[6px] ${
-                                    compactRows === "medium" ? "bg-primary text-background" : ""
-                                }`}
-                                aria-label="Visualização média"
-                            >
-                                <Rows3 size={18} />
-                            </button>
+                            {isMobile === false && (
+                                <button
+                                    onClick={() => handleCompactRows("medium")}
+                                    className={`rounded-full p-[6px] ${
+                                        compactRows === "medium" ? "bg-primary text-background" : ""
+                                    }`}
+                                    aria-label="Visualização média"
+                                >
+                                    <Rows3 size={18} />
+                                </button>
+                            )}
+
                             <button
                                 onClick={() => handleCompactRows("small")}
                                 className={`rounded-full p-[6px] ${
@@ -133,7 +137,9 @@ export function Cryptocurrencies() {
                             <tr className="text-left">
                                 <th aria-hidden="true" className={`w-4 ${headPadding}`} />
                                 <th className={"w-10 text-left " + headPadding}>#</th>
-                                <th className={`w-[220px] ${headPadding}`}>Nome</th>
+                                <th className={`w-[220px] ${headPadding} sticky left-0 z-20 bg-[#080c0f] `}>
+                                    Nome
+                                </th>
                                 <th className={headPadding}>Preço</th>
                                 <th className={headPadding}>1h</th>
                                 <th className={headPadding}>24h</th>
@@ -149,7 +155,7 @@ export function Cryptocurrencies() {
                                 >
                                     <td className={cellPadding} />
                                     <td className={`${cellPadding} font-normal text-muted-foreground`}>{index + 1}</td>
-                                    <td className={cellPadding}>
+                                    <td className={`${cellPadding} sticky left-0 z-10 bg-[#090e11] backdrop-blur-sm`}>
                                         <div className="flex items-center gap-2">
                                             <img
                                                 src={crypto.image}
@@ -157,7 +163,9 @@ export function Cryptocurrencies() {
                                                 className="h-6 w-6 rounded-full object-cover"
                                             />
                                             <div
-                                                className={`flex  ${compactRows === "big" ? "flex-col " : "flex-row gap-1"} ${compactRows === "small" && "items-center"}`}
+                                                className={`flex ${
+                                                    compactRows === "big" ? "flex-col " : "flex-row gap-1"
+                                                } ${compactRows === "small" && "items-center"}`}
                                             >
                                                 <span className="font-medium">{crypto.name}</span>
                                                 <span className="text-[0.65rem] uppercase text-muted-foreground">

@@ -1,6 +1,7 @@
 import { req } from "@/services/api";
 import { useEffect, useState } from "react";
 import type { CryptocoinType, GlobalMarketDataType } from "./types";
+import { isMobile } from "@/utils/mobile";
 
 const CACHE_KEY_COINS_MARKET = "coinsMarket";
 const CACHE_KEY_GLOBAL = "globalMarketData";
@@ -9,7 +10,7 @@ const CACHE_EXPIRATION_MS = 5 * 60 * 1000; // 5 minutos
 export default function useCryptocurrencies() {
     const [cryptocoins, setCryptocoins] = useState<CryptocoinType[]>([]);
     const [globalMarketData, setGlobalMarketData] = useState<GlobalMarketDataType | null>(null);
-    const [compactRows, setCompactRows] = useState<"small" | "medium" | "big">("big");
+    const [compactRows, setCompactRows] = useState<"small" | "medium" | "big">(isMobile === false ? "small" : "big");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cacheIsExist = (cached: string | null, setState: any): boolean => {
