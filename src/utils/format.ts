@@ -14,3 +14,9 @@ export function formatPercentage(value: number): string {
         maximumFractionDigits: 2,
     }).format(Math.abs(value) / 100);
 }
+
+export function formatNumber(value: number): string {
+    return new Intl.NumberFormat("pt-BR", {
+        style: "decimal",
+    }).format(value);
+}

@@ -54,9 +54,18 @@ O projeto sobe, por padrão, em `http://localhost:5173`.
 - **Cache de requisições com `localStorage`**  
   Para evitar limites de rate da CoinGecko e melhorar a UX, as respostas são cacheadas com timestamp e um tempo de expiração (ex.: 5 minutos).
 
+- **Cache de requisições de moedas com `localStorage` e limitador** 
+ Para evitar que o localStorage fique sobrecarregado, foi criado um limite de 3 moedas em cache. Quando esse número é ultrapassado, a moeda mais antiga é removida automaticamente.
+
 ---
 
 ### Observações
 
 Este projeto não é um produto final, e sim um **laboratório visual** e de boas práticas de código para portfólio.  
 Quebras de layout e features em construção podem aparecer à medida que novas ideias forem sendo testadas. :)
+
+
+### toDo
+* terminar todo o mvp
+* implementar mensagens de erro
+* implementar loading

@@ -34,7 +34,7 @@ export default function MainLayout() {
                 >
                     Criptomoedas
                 </Link>
-                <Link
+                {/* <Link
                     onClick={desactivate}
                     className={cn(
                         "hover:text-primary transition-colors",
@@ -43,7 +43,7 @@ export default function MainLayout() {
                     to="/converter"
                 >
                     Converter
-                </Link>
+                </Link> */}
             </nav>
         );
     };

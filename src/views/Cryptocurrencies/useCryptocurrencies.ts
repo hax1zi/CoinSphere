@@ -5,7 +5,7 @@ import { isMobile } from "@/utils/mobile";
 
 const CACHE_KEY_COINS_MARKET = "coinsMarket";
 const CACHE_KEY_GLOBAL = "globalMarketData";
-const CACHE_EXPIRATION_MS = 5 * 60 * 1000; // 5 minutos
+const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutos
 
 export default function useCryptocurrencies() {
     const [cryptocoins, setCryptocoins] = useState<CryptocoinType[]>([]);

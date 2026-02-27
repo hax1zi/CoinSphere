@@ -5,11 +5,12 @@ import { formatMoney, formatPercentage } from "@/utils/format";
 import SourceCoinGecko from "@/components/SourceCoinGecko";
 import PorcentTable from "./components/PocentTable";
 import { isMobile } from "@/utils/mobile";
+import { useNavigate } from "react-router-dom";
 
 export function Cryptocurrencies() {
     const { cryptocoins, globalMarketData, compactRows, handleCompactRows } = useCryptocurrencies();
 
-    console.log(globalMarketData);
+    const navigate = useNavigate();
 
     const DadosDoMercado = () => {
         return (
@@ -137,9 +138,7 @@ export function Cryptocurrencies() {
                             <tr className="text-left">
                                 <th aria-hidden="true" className={`w-4 ${headPadding}`} />
                                 <th className={"w-10 text-left " + headPadding}>#</th>
-                                <th className={`w-[220px] ${headPadding} sticky left-0 z-20 bg-[#080c0f] `}>
-                                    Nome
-                                </th>
+                                <th className={`w-[220px] ${headPadding} sticky left-0 z-20 bg-[#080c0f] `}>Nome</th>
                                 <th className={headPadding}>Preço</th>
                                 <th className={headPadding}>1h</th>
                                 <th className={headPadding}>24h</th>
@@ -150,12 +149,13 @@ export function Cryptocurrencies() {
                         <tbody>
                             {cryptocoins.map((crypto, index) => (
                                 <tr
+                                    onClick={() => navigate("/moeda/" + crypto.id)}
                                     key={crypto.id}
                                     className={`border-b cursor-pointer hover:bg-background/80 transition-colors border-[#383838]/60 ${rowTextSize}`}
                                 >
                                     <td className={cellPadding} />
                                     <td className={`${cellPadding} font-normal text-muted-foreground`}>{index + 1}</td>
-                                    <td className={`${cellPadding} sticky left-0 z-10 bg-[#090e11] backdrop-blur-sm`}>
+                                    <td className={`${cellPadding} sticky left-0 z-10 bg-[#090e11] `}>
                                         <div className="flex items-center gap-2">
                                             <img
                                                 src={crypto.image}
