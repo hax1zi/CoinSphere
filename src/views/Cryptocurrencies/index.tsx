@@ -1,4 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Rows2, Rows3, Rows4, Search } from "lucide-react";
 import useCryptocurrencies from "./useCryptocurrencies";
 import { formatMoney, formatPercentage } from "@/utils/format";
@@ -8,7 +7,7 @@ import { isMobile } from "@/utils/mobile";
 import { useNavigate } from "react-router-dom";
 
 export function Cryptocurrencies() {
-    const { cryptocoins, globalMarketData, compactRows, handleCompactRows } = useCryptocurrencies();
+    const { cryptocoins, globalMarketData, compactRows, handleCompactRows, mainCoin } = useCryptocurrencies();
 
     const navigate = useNavigate();
 
@@ -32,35 +31,44 @@ export function Cryptocurrencies() {
                 <p className="text-xs opacity-80 sm:text-sm">
                     A capitalização global de mercado hoje é de{" "}
                     <span className="font-semibold">
-                        {formatMoney(globalMarketData?.total_market_cap?.usd ?? 0, "USD", true, 0)}
+                        {formatMoney(
+                            globalMarketData?.total_market_cap?.[mainCoin] ?? 0,
+                            mainCoin.toUpperCase(),
+                            true,
+                            0,
+                        )}
                     </span>
                     .
                 </p>
                 <div className="mt-4 flex w-full flex-col gap-3 sm:flex-row">
-                    <Card className="w-full rounded-lg border-primary bg-background">
-                        <CardContent className="px-3 py-4 text-left sm:text-center">
-                            <p className="text-sm opacity-80">Capitalização de mercado</p>
-                            <h3 className="mt-1 text-sm font-bold">
-                                {formatMoney(globalMarketData?.total_market_cap?.usd ?? 0, "USD", false, 0)}
-                            </h3>
-                        </CardContent>
-                    </Card>
-                    <Card className="w-full rounded-lg border-primary bg-background">
-                        <CardContent className="px-3 py-4 text-left sm:text-center">
-                            <p className="text-sm opacity-80">Volume em 24 h</p>
-                            <h3 className="mt-1 text-sm font-bold">
-                                {formatMoney(globalMarketData?.total_volume?.usd ?? 0, "USD", false, 0)}
-                            </h3>
-                        </CardContent>
-                    </Card>
-                    <Card className="w-full rounded-lg border-primary bg-background">
-                        <CardContent className="px-3 py-4 text-left sm:text-center">
-                            <p className="text-sm opacity-80">Dominância do Bitcoin</p>
-                            <h3 className="mt-1 text-sm font-bold">
-                                {formatPercentage(globalMarketData?.market_cap_percentage?.btc ?? 0)}
-                            </h3>
-                        </CardContent>
-                    </Card>
+                    <div className="w-full rounded-lg border p-3">
+                        <p className="text-sm opacity-80">Capitalização de mercado</p>
+                        <h3 className="mt-1 text-sm font-bold">
+                            {formatMoney(
+                                globalMarketData?.total_market_cap?.[mainCoin] ?? 0,
+                                mainCoin.toUpperCase(),
+                                false,
+                                0,
+                            )}
+                        </h3>
+                    </div>
+                    <div className="w-full rounded-lg border p-3">
+                        <p className="text-sm opacity-80">Volume em 24 h</p>
+                        <h3 className="mt-1 text-sm font-bold">
+                            {formatMoney(
+                                globalMarketData?.total_volume?.[mainCoin] ?? 0,
+                                mainCoin.toUpperCase(),
+                                false,
+                                0,
+                            )}
+                        </h3>
+                    </div>
+                    <div className="w-full rounded-lg border p-3">
+                        <p className="text-sm opacity-80">Dominância do Bitcoin</p>
+                        <h3 className="mt-1 text-sm font-bold">
+                            {formatPercentage(globalMarketData?.market_cap_percentage?.btc ?? 0)}
+                        </h3>
+                    </div>
                 </div>
             </section>
         );
@@ -143,7 +151,7 @@ export function Cryptocurrencies() {
                                 <th className={headPadding}>1h</th>
                                 <th className={headPadding}>24h</th>
                                 <th className={headPadding}>Volume 24h</th>
-                                <th className={` ${headPadding}`}>Market Cap</th>
+                                <th className={` ${headPadding}`}>Cap. de Mercado</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -155,7 +163,7 @@ export function Cryptocurrencies() {
                                 >
                                     <td className={cellPadding} />
                                     <td className={`${cellPadding} font-normal text-muted-foreground`}>{index + 1}</td>
-                                    <td className={`${cellPadding} sticky left-0 z-10 bg-[#090e11] `}>
+                                    <td className={`${cellPadding} sm:sticky left-0 z-10 bg-[#090e11] `}>
                                         <div className="flex items-center gap-2">
                                             <img
                                                 src={crypto.image}
@@ -175,7 +183,7 @@ export function Cryptocurrencies() {
                                         </div>
                                     </td>
                                     <td className={cellPadding}>
-                                        {formatMoney(crypto.current_price ?? 0, "USD", false, 2)}
+                                        {formatMoney(crypto.current_price ?? 0, mainCoin.toUpperCase(), false, 2)}
                                     </td>
                                     <td className={cellPadding + " min-w-24"}>
                                         <PorcentTable
@@ -190,10 +198,10 @@ export function Cryptocurrencies() {
                                         />
                                     </td>
                                     <td className={cellPadding}>
-                                        {formatMoney(crypto.total_volume ?? 0, "USD", false, 2)}
+                                        {formatMoney(crypto.total_volume ?? 0, mainCoin.toUpperCase(), false, 2)}
                                     </td>
                                     <td className={cellPadding}>
-                                        {formatMoney(crypto.market_cap ?? 0, "USD", false, 2)}
+                                        {formatMoney(crypto.market_cap ?? 0, mainCoin.toUpperCase(), false, 2)}
                                     </td>
                                 </tr>
                             ))}

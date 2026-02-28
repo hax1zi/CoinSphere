@@ -9,7 +9,7 @@ import Chart from "./components/Chart";
 
 export default function Coin() {
     const { id } = useParams();
-    const { coinData, mainValuesArray } = useCoin({ coinId: id });
+    const { coinData, mainValuesArray, mainCoin } = useCoin({ coinId: id });
 
     if (!coinData) {
         return (
@@ -82,21 +82,22 @@ export default function Coin() {
                     <p className="text-xs uppercase text-muted-foreground">Preço atual</p>
                     <div className="flex items-center justify-end gap-2">
                         <span className="text-2xl font-semibold sm:text-3xl">
-                            {formatMoney(coinData.market_data.current_price.usd ?? 0, "USD", false, 2)}
+                            {formatMoney(coinData.market_data.current_price?.[mainCoin] ?? 0, mainCoin.toLowerCase(), false, 2)}
                         </span>
                         <PorcentTable
-                            porcent={coinData.market_data.price_change_percentage_24h ?? 0}
+                            porcent={coinData.market_data.price_change_percentage_30d ?? 0}
                             compactRows="small"
                         />
+                        <span className="text-xs font-medium text-muted-foreground -ml-2 -mt-2">1M</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
                         Máx 24h:{" "}
                         <span className="font-medium">
-                            {formatMoney(coinData.market_data.high_24h.usd ?? 0, "USD", false, 2)}
+                            {formatMoney(coinData.market_data.high_24h?.[mainCoin] ?? 0, mainCoin.toLowerCase(), false, 2)}
                         </span>{" "}
                         · Mín 24h:{" "}
                         <span className="font-medium">
-                            {formatMoney(coinData.market_data.low_24h.usd ?? 0, "USD", false, 2)}
+                            {formatMoney(coinData.market_data.low_24h?.[mainCoin] ?? 0, mainCoin.toLowerCase(), false, 2)}
                         </span>
                     </p>
                 </div>
@@ -116,7 +117,7 @@ export default function Coin() {
                                 </p>
                                 <p className="mt-1 text-sm font-semibold">
                                     {cell.type === "amount"
-                                        ? formatMoney(cell.value ?? 0, "USD", false, 0)
+                                        ? formatMoney(cell.value ?? 0, mainCoin.toLowerCase(), false, 0)
                                         : formatNumber(cell.value ?? 0)}
                                 </p>
                             </div>

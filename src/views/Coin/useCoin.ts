@@ -1,6 +1,7 @@
 import { req } from "@/services/api";
 import { useEffect, useState } from "react";
 import type { CoinDetails } from "./types";
+import { useMainCoin } from "@/store/mainCoin";
 
 interface UseCoinProps {
     coinId: string | undefined;
@@ -10,6 +11,7 @@ const CACHE_EXPIRATION_MS = 10 * 60 * 1000;
 const MAX_CACHE_COINS = 2;
 
 export default function useCoin({ coinId }: UseCoinProps) {
+    const { mainCoin } = useMainCoin();
     const CACHE_KEY_COIN = `coin_${coinId}`;
 
     const [coinData, setCoinData] = useState<CoinDetails | null>(null);
@@ -74,17 +76,17 @@ export default function useCoin({ coinId }: UseCoinProps) {
     const mainValuesArray = [
         {
             label: "Capitalização de mercado",
-            value: coinData && coinData.market_data.market_cap.usd,
+            value: coinData && coinData.market_data.market_cap?.[mainCoin],
             type: "amount" as const,
         },
         {
             label: "Avaliação totalmente diluída",
-            value: coinData && coinData.market_data.fully_diluted_valuation.usd,
+            value: coinData && coinData.market_data.fully_diluted_valuation?.[mainCoin],
             type: "amount" as const,
         },
         {
             label: "Negociação 24h",
-            value: coinData && coinData.market_data.total_volume.usd,
+            value: coinData && coinData.market_data.total_volume?.[mainCoin],
             type: "amount" as const,
         },
         {
@@ -104,5 +106,5 @@ export default function useCoin({ coinId }: UseCoinProps) {
         },
     ];
 
-    return { coinData, mainValuesArray };
+    return { coinData, mainValuesArray, mainCoin };
 }

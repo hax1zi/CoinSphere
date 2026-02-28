@@ -44,6 +44,7 @@ export interface CryptocoinType {
 
 interface MarketOptions {
     usd: number;
+    brl: number;
     btc: number;
 }
 

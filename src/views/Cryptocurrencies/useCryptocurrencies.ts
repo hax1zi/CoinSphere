@@ -2,12 +2,14 @@ import { req } from "@/services/api";
 import { useEffect, useState } from "react";
 import type { CryptocoinType, GlobalMarketDataType } from "./types";
 import { isMobile } from "@/utils/mobile";
+import { useMainCoin } from "@/store/mainCoin";
 
 const CACHE_KEY_COINS_MARKET = "coinsMarket";
 const CACHE_KEY_GLOBAL = "globalMarketData";
 const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutos
 
 export default function useCryptocurrencies() {
+    const { mainCoin } = useMainCoin();
     const [cryptocoins, setCryptocoins] = useState<CryptocoinType[]>([]);
     const [globalMarketData, setGlobalMarketData] = useState<GlobalMarketDataType | null>(null);
     const [compactRows, setCompactRows] = useState<"small" | "medium" | "big">(isMobile === true ? "small" : "big");
@@ -37,13 +39,21 @@ export default function useCryptocurrencies() {
     };
 
     const getCoins = () => {
-        const cached = localStorage.getItem(CACHE_KEY_COINS_MARKET);
+        const cacheKey = `${CACHE_KEY_COINS_MARKET}_${mainCoin}`;
+        const cached = localStorage.getItem(cacheKey);
+
         if (cacheIsExist(cached, setCryptocoins)) return;
 
-        req.get("/coins/markets?vs_currency=usd&price_change_percentage=1h")
+        req.get(`/coins/markets?vs_currency=${mainCoin}&price_change_percentage=1h`)
             .then((res) => {
                 setCryptocoins(res.data);
-                localStorage.setItem(CACHE_KEY_COINS_MARKET, JSON.stringify({ data: res.data, timestamp: Date.now() }));
+                localStorage.setItem(
+                    cacheKey,
+                    JSON.stringify({
+                        data: res.data,
+                        timestamp: Date.now(),
+                    }),
+                );
             })
             .catch(console.error);
     };
@@ -51,10 +61,10 @@ export default function useCryptocurrencies() {
     useEffect(() => {
         getDataGlobalMarket();
         getCoins();
-    }, []);
+    }, [mainCoin]);
 
     const handleCompactRows = (padding: "small" | "medium" | "big") => {
         setCompactRows(padding);
     };
-    return { cryptocoins, globalMarketData, handleCompactRows, compactRows };
+    return { cryptocoins, globalMarketData, handleCompactRows, compactRows, mainCoin };
 }

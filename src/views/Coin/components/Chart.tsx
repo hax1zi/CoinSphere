@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { createChart, AreaSeries, ColorType } from "lightweight-charts";
 import { req } from "@/services/api";
+import { Button } from "@/components/ui/button";
+import { useMainCoin } from "@/store/mainCoin";
 
 interface ChartProps {
     id: string | undefined;
@@ -10,12 +12,13 @@ const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos
 const MAX_CACHE_CHARTS = 3;
 
 export default function Chart({ id }: ChartProps) {
+    const { mainCoin } = useMainCoin();
     const chartRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         if (!chartRef.current || !id) return;
 
-        const CACHE_KEY = `chart_${id}`;
+        const CACHE_KEY = `chart_${id}_${mainCoin}`;
 
         const chart = createChart(chartRef.current, {
             height: 400,
@@ -35,7 +38,7 @@ export default function Chart({ id }: ChartProps) {
         const areaSeries = chart.addSeries(AreaSeries, {
             lineWidth: 2,
         });
-        
+
         function limitCache() {
             const keys = Object.keys(localStorage).filter((key) => key.startsWith("chart_"));
 
@@ -73,7 +76,7 @@ export default function Chart({ id }: ChartProps) {
 
             const response = await req.get(`/coins/${id}/market_chart`, {
                 params: {
-                    vs_currency: "brl",
+                    vs_currency: mainCoin.toLowerCase(),
                     days: 30,
                 },
             });
@@ -113,11 +116,38 @@ export default function Chart({ id }: ChartProps) {
         fetchData();
 
         return () => chart.remove();
-    }, [id]);
+    }, [id, mainCoin]);
 
     return (
-        <div className="rounded-2xl overflow-hidden">
-            <div ref={chartRef} style={{ width: "100%", height: "400px" }} />
+        <div className="relative">
+            <div className="w-full flex justify-between">
+                <div></div>
+
+                <div className="bg-[#0E1215] border rounded-lg inline-flex mb-4">
+                    <Button variant="ghost" disabled>
+                        24H
+                    </Button>
+                    <Button variant="ghost" disabled>
+                        7D
+                    </Button>
+                    <Button variant="secondary">1M</Button>
+                    <Button variant="ghost" disabled>
+                        3M
+                    </Button>
+                    <Button variant="ghost" disabled>
+                        YTD
+                    </Button>
+                    <Button variant="ghost" disabled>
+                        1Y
+                    </Button>
+                    <Button variant="ghost" disabled>
+                        Max
+                    </Button>
+                </div>
+            </div>
+            <div className="rounded-2xl overflow-hidden">
+                <div ref={chartRef} style={{ width: "100%", height: "400px" }} />
+            </div>
         </div>
     );
 }

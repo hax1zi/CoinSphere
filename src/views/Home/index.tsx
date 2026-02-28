@@ -18,7 +18,7 @@ export function Home() {
                             CoinSphere
                         </span>
                     </h2>
-                    <p className="text-lg font-semibold sm:text-xl">Rastreador de Portfólio de Criptomoedas</p>
+                    <p className="text-lg font-semibold sm:text-xl">Acompanhe. Analise. Supere o mercado.</p>
                     <div className="mt-4 mb-4 h-1 w-32 rounded-full bg-secondary/80 max-md:w-full" />
                     <p className="mx-auto max-w-[600px] text-sm opacity-90 sm:text-base">
                         Seu universo cripto em um só lugar. Acompanhe suas moedas, descubra tendências e veja seu
@@ -50,7 +50,7 @@ export function Home() {
                 <div className="absolute bottom-0 right-0  flex  p-2 px-3 rounded-lg">
                     <a href="https://www.coingecko.com/" target="_blank" className="flex items-center gap-1">
                         Data powered by
-                        <img src="/CGAPI-Lockup@2x-1.png" className="w-40" />
+                        <img src="/CGAPI-Lockup@2x-1.png" alt="coinGeckoApi" className="w-40" />
                     </a>
                 </div>
             </section>

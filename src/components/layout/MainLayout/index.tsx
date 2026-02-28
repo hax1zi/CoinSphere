@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 import { useMobileMenuActive } from "@/store/useMobileMenuActive";
 import { Bolt, Menu, X } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import * as Dropdown from "@/components/ui/dropdown-menu";
+import { useMainCoin } from "@/store/mainCoin";
 
 export default function MainLayout() {
     const location = useLocation();
@@ -48,19 +50,38 @@ export default function MainLayout() {
         );
     };
     const Header = () => {
+        const { mainCoin, setMainCoin } = useMainCoin();
         return (
             <header className="z-20 border-b-2 px-4 py-4 text-black dark:text-white sm:px-6 lg:px-[10vw]">
                 <div className="flex items-center justify-between gap-4">
-                    <div className="inline-flex items-center gap-2">
+                    <Link to={"/"} className="inline-flex items-center gap-2">
                         <img src="/logo.svg" alt="Logo CoinSphere" className="h-8 w-auto" />
                         <h1 className="text-xl font-bold sm:text-2xl lg:block">CoinSphere</h1>
-                    </div>
+                    </Link>
                     <div className="hidden items-center gap-6 md:flex">
                         <Navbar />
                         <div className="inline-flex items-center gap-1">
-                            <Button variant="ghost" size="icon" aria-label="Atalhos rápidos">
-                                <Bolt />
-                            </Button>
+                            <Dropdown.DropdownMenu>
+                                <Dropdown.DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" aria-label="Atalhos rápidos">
+                                        <Bolt />
+                                    </Button>
+                                </Dropdown.DropdownMenuTrigger>
+                                <Dropdown.DropdownMenuContent className="min-w-40  dark">
+                                    <Dropdown.DropdownMenuSub>
+                                        <Dropdown.DropdownMenuSubTrigger className="flex justify-between">
+                                            Moeda <span className="uppercase text-muted-foreground">{mainCoin}</span>
+                                        </Dropdown.DropdownMenuSubTrigger>
+                                        <Dropdown.DropdownMenuPortal>
+                                            <Dropdown.DropdownMenuSubContent className="dark">
+                                                <Dropdown.DropdownMenuItem onSelect={() => setMainCoin("brl")} disabled={mainCoin === "brl"}>BRL</Dropdown.DropdownMenuItem>
+                                                <Dropdown.DropdownMenuItem onSelect={() => setMainCoin("usd")} disabled={mainCoin === "usd"}>USD</Dropdown.DropdownMenuItem>
+                                                <Dropdown.DropdownMenuItem onSelect={() => setMainCoin("btc")} disabled={mainCoin === "btc"}>BTC</Dropdown.DropdownMenuItem>
+                                            </Dropdown.DropdownMenuSubContent>
+                                        </Dropdown.DropdownMenuPortal>
+                                    </Dropdown.DropdownMenuSub>
+                                </Dropdown.DropdownMenuContent>
+                            </Dropdown.DropdownMenu>
                             <Button variant="ghost">Entrar</Button>
                             <Button className="font-semibold">Abrir minha conta</Button>
                         </div>
