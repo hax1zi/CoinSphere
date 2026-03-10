@@ -1,12 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createChart, AreaSeries, ColorType } from "lightweight-charts";
+import type { AreaData, UTCTimestamp } from "lightweight-charts";
 import { req } from "@/services/api";
 import { Button } from "@/components/ui/button";
+import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { useMainCoin } from "@/store/mainCoin";
 
 interface ChartProps {
     id: string | undefined;
 }
+
+type ChartPoint = AreaData<UTCTimestamp>;
 
 const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos
 const MAX_CACHE_CHARTS = 3;
@@ -14,9 +18,15 @@ const MAX_CACHE_CHARTS = 3;
 export default function Chart({ id }: ChartProps) {
     const { mainCoin } = useMainCoin();
     const chartRef = useRef<HTMLDivElement | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!chartRef.current || !id) return;
+        if (!chartRef.current || !id) {
+            setIsLoading(false);
+            return;
+        }
+
+        setIsLoading(true);
 
         const CACHE_KEY = `chart_${id}_${mainCoin}`;
 
@@ -63,42 +73,46 @@ export default function Chart({ id }: ChartProps) {
         }
 
         async function fetchData() {
-            const cached = localStorage.getItem(CACHE_KEY);
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
 
-            if (cached) {
-                const { data, timestamp } = JSON.parse(cached);
+                if (cached) {
+                    const { data, timestamp } = JSON.parse(cached);
 
-                if (Date.now() - timestamp < CACHE_EXPIRATION) {
-                    applyChart(data);
-                    return;
+                    if (Date.now() - timestamp < CACHE_EXPIRATION) {
+                        applyChart(data);
+                        return;
+                    }
                 }
+
+                const response = await req.get(`/coins/${id}/market_chart`, {
+                    params: {
+                        vs_currency: mainCoin.toLowerCase(),
+                        days: 30,
+                    },
+                });
+
+                const formatted = response.data.prices.map((item: [number, number]) => ({
+                    time: Math.floor(item[0] / 1000) as UTCTimestamp,
+                    value: item[1],
+                }));
+
+                localStorage.setItem(
+                    CACHE_KEY,
+                    JSON.stringify({
+                        data: formatted,
+                        timestamp: Date.now(),
+                    }),
+                );
+
+                limitCache();
+                applyChart(formatted);
+            } finally {
+                setIsLoading(false);
             }
-
-            const response = await req.get(`/coins/${id}/market_chart`, {
-                params: {
-                    vs_currency: mainCoin.toLowerCase(),
-                    days: 30,
-                },
-            });
-
-            const formatted = response.data.prices.map((item: [number, number]) => ({
-                time: Math.floor(item[0] / 1000),
-                value: item[1],
-            }));
-
-            localStorage.setItem(
-                CACHE_KEY,
-                JSON.stringify({
-                    data: formatted,
-                    timestamp: Date.now(),
-                }),
-            );
-
-            limitCache();
-            applyChart(formatted);
         }
 
-        function applyChart(formatted: any[]) {
+        function applyChart(formatted: ChartPoint[]) {
             const isPositive = formatted[0].value < formatted[formatted.length - 1].value;
 
             const mainColor = isPositive ? "#16c784" : "#ea3943";
@@ -120,6 +134,7 @@ export default function Chart({ id }: ChartProps) {
 
     return (
         <div className="relative">
+            <LoadingOverlay isLoading={isLoading} message="Carregando gráfico..." />
             <div className="w-full flex justify-between">
                 <div></div>
 

@@ -3,12 +3,22 @@ import { Link } from "react-router-dom";
 
 export function Home() {
     return (
-        <main className="flex h-[calc(100vh-130px)] w-full ">
+        <main className="flex min-h-[calc(100vh-130px)] w-full">
             <section
                 aria-labelledby="home-hero-title"
-                className="flex w-full relative h-full gap-10 justify-between items-center overflow-hidden "
+                className="relative flex w-full items-center justify-between gap-10 overflow-hidden rounded-2xl  bg-background/35 px-4 py-8 backdrop-blur-sm sm:px-8 md:min-h-[72vh]"
             >
-                <div className="max-w-xl text-center md:text-left">
+                <div className="pointer-events-none absolute inset-0 opacity-40">
+                    <div
+                        className="h-full w-full"
+                        style={{
+                            backgroundImage:
+                                "radial-gradient(circle at 14% 18%, rgba(242,174,49,0.12) 0, transparent 32%), radial-gradient(circle at 86% 78%, rgba(242,116,5,0.1) 0, transparent 34%), radial-gradient(1.5px 1.5px at 18% 26%, rgba(255,255,255,0.35) 0, transparent 100%), radial-gradient(1.5px 1.5px at 42% 68%, rgba(255,255,255,0.28) 0, transparent 100%), radial-gradient(1.5px 1.5px at 72% 34%, rgba(255,255,255,0.3) 0, transparent 100%), radial-gradient(1.5px 1.5px at 90% 18%, rgba(255,255,255,0.25) 0, transparent 100%)",
+                        }}
+                    />
+                </div>
+
+                <div className="max-w-xl text-center md:text-left z-10">
                     <h2
                         id="home-hero-title"
                         className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl"
@@ -25,7 +35,7 @@ export function Home() {
                         portfólio ganhar vida em tempo real. Do Bitcoin às novas gemas, o CoinSphere coloca você no
                         centro da galáxia cripto.
                     </p>
-                    <div className="mt-4 flex items-center gap-3 flex-row  max-md:justify-center">
+                    <div className="mt-6 flex flex-row items-center gap-3 max-md:justify-center">
                         <Button size="lg" className=" sm:w-auto">
                             Começar agora
                         </Button>
@@ -37,8 +47,10 @@ export function Home() {
                         </Link>
                     </div>
                 </div>
-                <div className="relative hidden  md:block">
-                    <div className="animate-[spin_8s_linear_infinite]">
+
+                <div className="relative z-10 hidden md:block">
+                    <div className="absolute left-1/2 top-1/2 h-52 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-3xl" />
+                    <div className="animate-[spin_16s_linear_infinite]">
                         <img src="/mainsCripto.png" alt="Principais criptomoedas em destaque" />
                     </div>
                     <img
@@ -47,7 +59,8 @@ export function Home() {
                         alt="Logo CoinSphere"
                     />
                 </div>
-                <div className="absolute bottom-0 right-0  flex  p-2 px-3 rounded-lg">
+
+                <div className="absolute bottom-0 right-0 z-10 flex rounded-lg p-2 px-3">
                     <a href="https://www.coingecko.com/" target="_blank" className="flex items-center gap-1">
                         Data powered by
                         <img src="/CGAPI-Lockup@2x-1.png" alt="coinGeckoApi" className="w-40" />

@@ -82,8 +82,12 @@ export default function MainLayout() {
                                     </Dropdown.DropdownMenuSub>
                                 </Dropdown.DropdownMenuContent>
                             </Dropdown.DropdownMenu>
-                            <Button variant="ghost">Entrar</Button>
-                            <Button className="font-semibold">Abrir minha conta</Button>
+                            <Link to="/entrar">
+                                <Button variant="ghost">Entrar</Button>
+                            </Link>
+                            <Link to="/registrar">
+                                <Button className="font-semibold">Abrir minha conta</Button>
+                            </Link>
                         </div>
                     </div>
                     <div className="md:hidden">
@@ -124,12 +128,12 @@ export default function MainLayout() {
                             <Button variant="ghost">
                                 <Bolt />
                             </Button>
-                            <Button onClick={desactivate} variant="ghost">
-                                Entrar
-                            </Button>
-                            <Button onClick={desactivate} className="font-semibold">
-                                Abrir minha conta
-                            </Button>
+                            <Link to="/entrar" onClick={desactivate}>
+                                <Button variant="ghost">Entrar</Button>
+                            </Link>
+                            <Link to="/registrar" onClick={desactivate}>
+                                <Button className="font-semibold">Abrir minha conta</Button>
+                            </Link>
                         </div>
                     </div>
                 </div>

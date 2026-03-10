@@ -1,5 +1,5 @@
 import { req } from "@/services/api";
-import { useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import type { CryptocoinType, GlobalMarketDataType } from "./types";
 import { isMobile } from "@/utils/mobile";
 import { useMainCoin } from "@/store/mainCoin";
@@ -9,10 +9,27 @@ const CACHE_KEY_GLOBAL = "globalMarketData";
 const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutos
 
 export default function useCryptocurrencies() {
+    const [loading, setLoading] = useState(false);
     const { mainCoin } = useMainCoin();
     const [cryptocoins, setCryptocoins] = useState<CryptocoinType[]>([]);
     const [globalMarketData, setGlobalMarketData] = useState<GlobalMarketDataType | null>(null);
-    const [compactRows, setCompactRows] = useState<"small" | "medium" | "big">(isMobile === true ? "small" : "big");
+    const [compactRows, setCompactRows] = useState<"small" | "medium" | "big">(isMobile === true ? "small" : "medium");
+
+    const [searchInput, setSearchInput] = useState("");
+    const deferredSearchInput = useDeferredValue(searchInput);
+
+    const filteredCoins = useMemo(() => {
+        const term = deferredSearchInput.trim().toLowerCase();
+        if (!term) return cryptocoins;
+
+        return cryptocoins.filter((coin) => {
+            return (
+                coin.name.toLowerCase().includes(term) ||
+                coin.symbol.toLowerCase().includes(term) ||
+                coin.id.toLowerCase().includes(term)
+            );
+        });
+    }, [cryptocoins, deferredSearchInput]);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cacheIsExist = (cached: string | null, setState: any): boolean => {
@@ -29,13 +46,15 @@ export default function useCryptocurrencies() {
     const getDataGlobalMarket = () => {
         const cached = localStorage.getItem(CACHE_KEY_GLOBAL);
         if (cacheIsExist(cached, setGlobalMarketData)) return;
+        setLoading(true);
 
         req.get("/global")
             .then((res) => {
                 setGlobalMarketData(res.data.data);
                 localStorage.setItem(CACHE_KEY_GLOBAL, JSON.stringify({ data: res.data.data, timestamp: Date.now() }));
             })
-            .catch(console.error);
+            .catch(console.error)
+            .finally(() => setLoading(false));
     };
 
     const getCoins = () => {
@@ -43,6 +62,7 @@ export default function useCryptocurrencies() {
         const cached = localStorage.getItem(cacheKey);
 
         if (cacheIsExist(cached, setCryptocoins)) return;
+        setLoading(true);
 
         req.get(`/coins/markets?vs_currency=${mainCoin}&price_change_percentage=1h`)
             .then((res) => {
@@ -55,7 +75,8 @@ export default function useCryptocurrencies() {
                     }),
                 );
             })
-            .catch(console.error);
+            .catch(console.error)
+            .finally(() => setLoading(false));
     };
 
     useEffect(() => {
@@ -66,5 +87,5 @@ export default function useCryptocurrencies() {
     const handleCompactRows = (padding: "small" | "medium" | "big") => {
         setCompactRows(padding);
     };
-    return { cryptocoins, globalMarketData, handleCompactRows, compactRows, mainCoin };
+    return { globalMarketData, handleCompactRows, compactRows, mainCoin, loading, searchInput, setSearchInput, filteredCoins};
 }
