@@ -23,6 +23,10 @@ export function Cryptocurrencies() {
 
     const navigate = useNavigate();
 
+    const toSmallCoinImage = (url: string) => {
+        return url.replace("/large/", "/small/");
+    };
+
     const dadosDoMercado = (
         <section
             aria-labelledby="crypto-market-overview-title"
@@ -192,9 +196,11 @@ export function Cryptocurrencies() {
                                         <td className={`${cellPadding} sm:sticky left-0 z-10 bg-[#090e11] `}>
                                             <div className="flex items-center gap-2">
                                                 <img
-                                                    src={crypto.image}
+                                                    src={toSmallCoinImage(crypto.image)}
                                                     alt={crypto.name}
                                                     className="h-6 w-6 rounded-full object-cover"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                 />
                                                 <div
                                                     className={`flex ${

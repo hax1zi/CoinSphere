@@ -2,6 +2,7 @@ import { req } from "@/services/api";
 import { useEffect, useState } from "react";
 import type { CoinDetails } from "./types";
 import { useMainCoin } from "@/store/mainCoin";
+import { toast } from "sonner";
 
 interface UseCoinProps {
     coinId: string | undefined;
@@ -63,7 +64,11 @@ export default function useCoin({ coinId }: UseCoinProps) {
                 setCoinData(res.data);
                 localStorage.setItem(CACHE_KEY_COIN, JSON.stringify({ data: res.data, timestamp: Date.now() }));
             })
-            .catch(console.error);
+            .catch((err) => {
+                toast.error("Erro ao carregar dados da moeda:", {
+                    description: err.message,
+                });
+            });
     };
 
     useEffect(() => {

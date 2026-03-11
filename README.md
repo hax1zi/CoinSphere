@@ -63,9 +63,3 @@ O projeto sobe, por padrão, em `http://localhost:5173`.
 
 Este projeto não é um produto final, e sim um **laboratório visual** e de boas práticas de código para portfólio.  
 Quebras de layout e features em construção podem aparecer à medida que novas ideias forem sendo testadas. :)
-
-
-### toDo
-* terminar todo o mvp
-* implementar mensagens de erro
-* implementar loading
