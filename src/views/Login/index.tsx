@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export function Login() {
     return (
         <main className="flex w-full items-center justify-center overflow-hidden ">
-            <section className="relative w-full h-[calc(100vh-130px)] flex items-center overflow-hidden rounded-2xl bg-background/40 p-4 backdrop-blur-sm sm:p-8">
+            <section className="relative w-full h-[calc(100vh-130px)] max-sm:h-full flex items-center overflow-hidden rounded-2xl bg-background/40 p-4 backdrop-blur-sm sm:p-8">
                 <div className="pointer-events-none absolute -left-24 -top-24 h-52 w-52 rounded-full bg-primary/15 blur-3xl" />
                 <div className="pointer-events-none absolute -bottom-28 -right-20 h-52 w-52 rounded-full bg-secondary/15 blur-3xl" />
 

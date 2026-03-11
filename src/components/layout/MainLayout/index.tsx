@@ -18,10 +18,7 @@ export default function MainLayout() {
             >
                 <Link
                     onClick={desactivate}
-                    className={cn(
-                        "hover:text-primary transition-colors",
-                        location.pathname === "/" && "border-b-4 border-primary",
-                    )}
+                    className={cn("hover:text-primary transition-colors", location.pathname === "/" && "text-primary ")}
                     to="/"
                 >
                     Inicio
@@ -30,22 +27,12 @@ export default function MainLayout() {
                     onClick={desactivate}
                     className={cn(
                         "hover:text-primary transition-colors",
-                        location.pathname === "/criptomoedas" && "border-b-4 border-primary",
+                        location.pathname === "/criptomoedas" && "text-primary ",
                     )}
                     to="/criptomoedas"
                 >
                     Criptomoedas
                 </Link>
-                {/* <Link
-                    onClick={desactivate}
-                    className={cn(
-                        "hover:text-primary transition-colors",
-                        location.pathname === "/converter" && "border-b-4 border-primar",
-                    )}
-                    to="/converter"
-                >
-                    Converter
-                </Link> */}
             </nav>
         );
     };
@@ -74,9 +61,24 @@ export default function MainLayout() {
                                         </Dropdown.DropdownMenuSubTrigger>
                                         <Dropdown.DropdownMenuPortal>
                                             <Dropdown.DropdownMenuSubContent className="dark">
-                                                <Dropdown.DropdownMenuItem onSelect={() => setMainCoin("brl")} disabled={mainCoin === "brl"}>BRL</Dropdown.DropdownMenuItem>
-                                                <Dropdown.DropdownMenuItem onSelect={() => setMainCoin("usd")} disabled={mainCoin === "usd"}>USD</Dropdown.DropdownMenuItem>
-                                                <Dropdown.DropdownMenuItem onSelect={() => setMainCoin("btc")} disabled={mainCoin === "btc"}>BTC</Dropdown.DropdownMenuItem>
+                                                <Dropdown.DropdownMenuItem
+                                                    onSelect={() => setMainCoin("brl")}
+                                                    disabled={mainCoin === "brl"}
+                                                >
+                                                    BRL
+                                                </Dropdown.DropdownMenuItem>
+                                                <Dropdown.DropdownMenuItem
+                                                    onSelect={() => setMainCoin("usd")}
+                                                    disabled={mainCoin === "usd"}
+                                                >
+                                                    USD
+                                                </Dropdown.DropdownMenuItem>
+                                                <Dropdown.DropdownMenuItem
+                                                    onSelect={() => setMainCoin("btc")}
+                                                    disabled={mainCoin === "btc"}
+                                                >
+                                                    BTC
+                                                </Dropdown.DropdownMenuItem>
                                             </Dropdown.DropdownMenuSubContent>
                                         </Dropdown.DropdownMenuPortal>
                                     </Dropdown.DropdownMenuSub>

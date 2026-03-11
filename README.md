@@ -1,65 +1,91 @@
-## CoinSphere
+# CoinSphere
 
-### Rastreador de Portfólio de Criptomoedas
+Aplicacao front-end para acompanhamento de criptomoedas com foco em UI moderna, responsiva e arquitetura simples para portfólio.
+Os dados de mercado sao consumidos da API publica do [`CoinGecko`](https://www.coingecko.com/).
 
-Projeto de portfólio desenvolvido com foco em UI moderna, responsiva e boas práticas de front‑end.  
-Os dados de mercado são consumidos a partir da API pública do [`CoinGecko`](https://www.coingecko.com/).
+## Stack
 
----
+- Vite 7
+- React 19 + TypeScript
+- React Router DOM 7
+- Tailwind CSS 4
+- shadcn/ui (componentes base)
+- Zustand (estado global, ex.: moeda principal e menu mobile)
+- Axios (HTTP)
+- Sonner (toasts)
+- lightweight-charts (grafico da pagina de moeda)
 
-### Tecnologias utilizadas
+## Rotas atuais
 
-- **Vite + React + TypeScript**
-- **React Router** para roteamento
-- **Tailwind CSS** (com design system customizado)
-- **Lucide Icons** para ícones
-- **CoinGecko API** para dados de mercado de criptomoedas
+- `/` Home
+- `/criptomoedas` Listagem e resumo de mercado
+- `/moeda/:id` Detalhes da moeda
+- `/entrar` Tela visual de login (sem autenticacao real)
+- `/registrar` Tela visual de cadastro (sem autenticacao real)
 
----
+## Funcionalidades implementadas
 
-### Funcionalidades principais
+- Home
+- Header com navegacao principal e atalho para trocar moeda base (`BRL`, `USD`, `BTC`).
+- Pagina de criptomoedas com:
+  - resumo de mercado global (market cap, volume 24h e dominancia de BTC);
+  - busca por nome, simbolo e id;
+  - controle de densidade da tabela (`small`, `medium`, `big`); 
+- Pagina de moeda com:
+  - grafico de 30 dias usando lightweight-charts;
+  - descricao resumida e metadados (algoritmo e block time);
+  - link para site oficial quando disponivel.
 
-- **Home**
-  - Hero responsivo apresentando o CoinSphere.
-  - CTAs para explorar criptomoedas.
+## Performance e cache
 
-- **Página de Criptomoedas**
-  - Visão geral do mercado (market cap global, volume 24h, dominância do BTC).
-  - Tabela de criptomoedas com:
-    - Nome, símbolo, preço, variação, volume e market cap.
-    - Controle de densidade das linhas (visualizações mais compactas ou espaçosas).
+- Cache em `localStorage` para dados globais e lista de moedas (TTL de 10 minutos).
+- Cache do grafico em `localStorage` (TTL de 10 minutos).
+- Limitador de cache do grafico: mantem no maximo 3 entradas e remove as mais antigas.
+- Lista de moedas salva em formato compacto (somente campos usados na UI).
+- Imagens da listagem com carregamento lazy + decode async.
 
----
+## Como rodar
 
-### Execução do projeto
+Pre-requisito recomendado: Node.js 20+.
 
-- **Instalar dependências**
+1. Instale as dependencias:
 
 ```bash
 npm install
 ```
 
-- **Rodar em ambiente de desenvolvimento**
+2. Rode em desenvolvimento:
 
 ```bash
-npm dev
+npm run dev
 ```
 
-O projeto sobe, por padrão, em `http://localhost:5173`.
+3. Build de producao:
 
----
+```bash
+npm run build
+```
 
-### Decisões técnicas 
+4. Preview local da build:
 
-- **Cache de requisições com `localStorage`**  
-  Para evitar limites de rate da CoinGecko e melhorar a UX, as respostas são cacheadas com timestamp e um tempo de expiração (ex.: 5 minutos).
+```bash
+npm run preview
+```
 
-- **Cache de requisições de moedas com `localStorage` e limitador** 
- Para evitar que o localStorage fique sobrecarregado, foi criado um limite de 3 moedas em cache. Quando esse número é ultrapassado, a moeda mais antiga é removida automaticamente.
+App local padrao: `http://localhost:5173`
 
----
+## Qualidade de codigo
 
-### Observações
+```bash
+npm run lint
+```
 
-Este projeto não é um produto final, e sim um **laboratório visual** e de boas práticas de código para portfólio.  
-Quebras de layout e features em construção podem aparecer à medida que novas ideias forem sendo testadas. :)
+## Observacoes
+
+- Projeto em evolucao para estudo e portfólio.
+- Algumas partes estao em modo visual (login/cadastro) e ainda nao possuem back-end/autenticacao.
+
+## Proximos passos sugeridos
+
+- Migrar tabela custom para Data Table do shadcn.
+- Implementar autenticacao real e persistencia de carteira do usuario.
